@@ -44,11 +44,11 @@ def remove_object(image, boxes, class_names, object_name):
 def main():
     unique_time = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
 
-    image = cv2.imread("input\orig_20240421094020397.jpg")
+    image = cv2.imread("input\orig_20240422105235700.jpg")
     get_results = detect(image)
 
     # Object name to remove
-    object_name = 'person'
+    object_name = 'tie'
 
     # Remove the object and make the removed portion transparent
     result = remove_object(image, get_results[0].boxes, get_results[0].names, object_name)
@@ -86,4 +86,4 @@ def mainlist():
 
 
 if __name__ == "__main__":
-    mainlist()
+    main()
