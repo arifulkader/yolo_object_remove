@@ -4,15 +4,32 @@ import numpy as np
 from ultralytics import YOLO
 import time
 import os
+import cv2
+import numpy as np
+
+from dotenv import load_dotenv
+import boto3
+load_dotenv(verbose=True)
+
+
+aws_client = boto3.client('rekognition',aws_access_key=os.getenv("AWS_ACCESS_KEY"),aws_secret_key=os.getenv("AWS_SECRET_kEY"))
 
 def detect(image):
     model = YOLO('yolov8n.pt')
     results = model(image, conf=0.7)
     return results
 
-
-import cv2
-import numpy as np
+def aws_detect(image):
+    success, byte_image = cv2.imencode('.jpg', image)
+    
+    response = aws_client.detect_labels(
+            Image={
+                'Bytes': byte_image.tobytes()
+            },
+            Features=[
+                'GENERAL_LABELS'
+            ]   
+        )
 
 def remove_object(image, boxes, class_names, object_name):
     # Convert image to RGBA (4 channels: Red, Green, Blue, Alpha)
@@ -87,3 +104,4 @@ def mainlist():
 
 if __name__ == "__main__":
     main()
+    # mainlist()
